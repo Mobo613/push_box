@@ -9,6 +9,7 @@ const char gStageData[] = "\
 ########";
 
 const int gStageWidth = 8;
+const int gStageHeight = 5;
 
 enum Object
 {
@@ -31,10 +32,23 @@ bool checkClear(const Object* state, int w, int h);
 
 int main()
 {
+	// 创建状态数组
+	Object* state = new Object[gStageWidth * gStageHeight];
+	// 初始化场景
+	initialize(state, gStageWidth, gStageHeight, gStageData);
+	// 主循环
 	while (true)
 	{
 		getInput();
 		updateGame();
 		draw();
 	}
+
+	// 胜利时的提示信息
+	cout << "胜利" << endl;
+	// 通关
+	delete[] state; // 删除动态创建的数组，需要使用delete []
+	state = 0;
+
+	return 0;
 }
