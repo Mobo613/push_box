@@ -24,6 +24,8 @@ enum Object
 	OBJ_UNKNOWN,
 };
 
+
+// 函数原型
 void initialize(Object* state, int w, int h, const char* stageData);
 void draw(const Object* state, int w, int h);
 void update(Object* state, char input, int w, int h);
@@ -39,9 +41,21 @@ int main()
 	// 主循环
 	while (true)
 	{
-		getInput();
-		updateGame();
-		draw();
+		// 首先绘制
+		draw(state, gStageWidth, gStageHeight);
+		// 通关检测
+		if (checkClear(state, gStageWidth, gStageHeight))
+		{
+			break;
+		}
+
+		// 获取输入
+		cout << "a: left d: right w: up s: down" << endl; //操作说明
+		char input;
+		cin >> input;
+
+		// 更新
+		update(state, input, gStageWidth, gStageHeight);
 	}
 
 	// 胜利时的提示信息
@@ -52,3 +66,4 @@ int main()
 
 	return 0;
 }
+
