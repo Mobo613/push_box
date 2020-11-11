@@ -152,7 +152,7 @@ void update(
 	int tx = x + dx;
 	int ty = y + dy;
 	// 检查坐标的最大值和最小值，不允许超出范围
-	if (tx < 0 || ty < 0 || tx >= w || tx >= h) {
+	if (tx < 0 || ty < 0 || tx >= w || ty >= h) {
 		return;
 	}
 
@@ -170,7 +170,7 @@ void update(
 		//检测沿着该方向的第二个网格位置是否在允许的范围内
 		int tx2 = tx + dx;
 		int ty2 = ty + dy;
-		if (tx2 < 0 || tx2 >= w || ty2 <0 || ty2>h) {
+		if (tx2 < 0 || tx2 >= w || ty2 <0 || ty2>=h) {
 			return; // 不能推动
 		}
 		int tp2 = ty2 * w + tx2; // 沿该方向的第二个网格的位置
