@@ -6,6 +6,7 @@ const char gStageData[] = "\
 ########\n\
 # .. p #\n\
 # oo   #\n\
+#      #\n\
 ########";
 
 const int gStageWidth = 8;
@@ -118,5 +119,66 @@ void draw(
 			cout << font[i];
 		}
 		cout << endl;
+	}
+}
+
+void update(
+	Object* s,
+	char input,
+	int w,
+	int h) {
+
+	// 将输入转换为移动量
+	int dx = 0;
+	int dy = 0;
+	// 方向
+	switch (input) {
+	case 'a': dx = -1; break; // 左
+	case 'd': dx = 1; break;  // 右
+	case 'w': dy = -1; break; // 上，左上角为（0，0）
+	case 's': dy = 1; break;  // 下
+	}
+
+	// 查找玩家的坐标
+	int i = 0;
+	for (int i = 0; i < w * h; ++i) {
+		if (s[i] == OBJ_MAN || s[i] == OBJ_MAN_ON_GOAL)
+			break;
+	}
+	int x = i % w; // x的值为除以宽度后的余数
+	int y = i / w; // y的值为除以宽度后的商
+
+	// 处理移动
+	int tx = x + dx;
+	int ty = y + dy;
+	// 检查坐标的最大值和最小值，不允许超出范围
+	if (tx < 0 || ty < 0 || tx >= w || tx >= h) {
+		return;
+	}
+
+	// 1. 要移动到的位置是空白或者目的地，玩家移动
+	int p = y * w + x;     // 玩家位置
+	int tp = ty * w + tx;  // 目标位置
+	if (s[tp] == OBJ_SPACE || s[tp] == OBJ_GOAL) {
+		// 如果是目的地，则将该处设置为“目的地玩家”
+		s[tp] = (s[tp] == OBJ_GOAL) ? OBJ_MAN_ON_GOAL : OBJ_MAN;
+		// 如果已经在目的地了，则将玩家所在的位置设置为目的地
+		s[tp] = (s[tp] == OBJ_MAN_ON_GOAL) ? OBJ_GOAL : OBJ_SPACE;
+	}
+	// 2. 要移动到的位置有箱子。如果沿着该方向的下一个网格是空白或者目的地，则移动
+	else if (s[tp] == OBJ_BLOCK || s[tp] == OBJ_BLOCK_ON_GOAL) {
+		//检测沿着该方向的第二个网格位置是否在允许的范围内
+		int tx2 = tx + dx;
+		int ty2 = ty + dy;
+		if (tx2 < 0 || tx2 >= w || ty2 <0 || ty2>h) {
+			return; // 不能推动
+		}
+		int tp2 = ty2 * w + tx2; // 沿该方向的第二个网格的位置
+		if (s[tp2] == OBJ_SPACE || s[tp2] == OBJ_GOAL) {
+			//逐个替换
+			s[tp2] = (s[tp2] == OBJ_GOAL) ? OBJ_BLOCK_ON_GOAL : OBJ_BLOCK;    // 该方向第二个网格
+			s[tp] = (s[tp] == OBJ_BLOCK_ON_GOAL) ? OBJ_MAN_ON_GOAL : OBJ_MAN; // 该方向下一个网格
+			s[p] = (s[p] == OBJ_MAN_ON_GOAL) ? OBJ_GOAL : OBJ_SPACE;          // 现在的位置
+		}
 	}
 }
