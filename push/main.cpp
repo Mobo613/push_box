@@ -1,13 +1,16 @@
-#include<iostream>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
+/*
 const char gStageData[] = "\
 ########\n\
 # .. p #\n\
 # oo   #\n\
 #      #\n\
 ########";
+*/
 
 const int gStageWidth = 8;
 const int gStageHeight = 5;
@@ -35,6 +38,18 @@ bool checkClear(const Object* state, int w, int h);
 
 int main()
 {
+	ifstream inputFile("StageData.txt", ifstream::binary);
+	if (!inputFile)
+		exit(-1);
+	inputFile.seekg(0, ios_base::end); // 移动到文件末尾
+	// 位置 = 文件大小
+	int fsize = inputFile.tellg();
+	inputFile.seekg(0, ios_base::beg); // 移动到文件起始位置
+	char* fileImage = new char[fsize]; // 分配足够的空间
+	inputFile.read(fileImage, fsize);  // 读取文件
+
+	const char* gStageData = fileImage;
+
 	// 创建状态数组
 	Object* state = new Object[gStageWidth * gStageHeight];
 	// 初始化场景
@@ -63,7 +78,10 @@ int main()
 	cout << "胜利" << endl;
 	// 通关
 	delete[] state; // 删除动态创建的数组，需要使用delete []
+	delete[] fileImage;
 	state = 0;
+	fileImage = 0;
+	gStageData = nullptr;
 
 	return 0;
 }
@@ -187,7 +205,7 @@ bool checkClear(
 	const Object* s,
 	int width,
 	int height) {
-	
+	// 直到没有不在目的地的箱子
 	for (int i = 0; i < width * height; ++i) {
 		if (s[i] == OBJ_BLOCK) {
 			return false;
