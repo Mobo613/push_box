@@ -141,7 +141,7 @@ void update(
 
 	// 查找玩家的坐标
 	int i = 0;
-	for (int i = 0; i < w * h; ++i) {
+	for (i = 0; i < w * h; ++i) {
 		if (s[i] == OBJ_MAN || s[i] == OBJ_MAN_ON_GOAL)
 			break;
 	}
@@ -163,7 +163,7 @@ void update(
 		// 如果是目的地，则将该处设置为“目的地玩家”
 		s[tp] = (s[tp] == OBJ_GOAL) ? OBJ_MAN_ON_GOAL : OBJ_MAN;
 		// 如果已经在目的地了，则将玩家所在的位置设置为目的地
-		s[tp] = (s[tp] == OBJ_MAN_ON_GOAL) ? OBJ_GOAL : OBJ_SPACE;
+		s[p] = (s[p] == OBJ_MAN_ON_GOAL) ? OBJ_GOAL : OBJ_SPACE;
 	}
 	// 2. 要移动到的位置有箱子。如果沿着该方向的下一个网格是空白或者目的地，则移动
 	else if (s[tp] == OBJ_BLOCK || s[tp] == OBJ_BLOCK_ON_GOAL) {
