@@ -182,3 +182,16 @@ void update(
 		}
 	}
 }
+
+bool checkClear(
+	const Object* s,
+	int width,
+	int height) {
+	
+	for (int i = 0; i < width * height; ++i) {
+		if (s[i] == OBJ_BLOCK) {
+			return false;
+		}
+	}
+	return true;
+}
